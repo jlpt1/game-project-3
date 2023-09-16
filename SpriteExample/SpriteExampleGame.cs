@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
+using System.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace SpriteExample
 {
@@ -20,7 +22,7 @@ namespace SpriteExample
         private float zoom = 1.0f;
         private Matrix transformMatrix;
 
-        List<BatSprite> bats = new List<BatSprite>();
+        List<EyeSprite> bats = new List<EyeSprite>();
         List<MagicSprite> magics = new List<MagicSprite>();
         private SpriteFont bangers;
         private MouseState previousMouseState;
@@ -47,7 +49,7 @@ namespace SpriteExample
 
             // TODO: Add your initialization logic here
             slimeGhost = new PlayerSprite();
-            BatSprite bat = new BatSprite() { Position = new Vector2(300, 100), Direction = Direction.Down };
+            EyeSprite bat = new EyeSprite() { Position = new Vector2(300, 100), Direction = Direction.Down };
             bats.Add(bat);
        
             base.Initialize();
@@ -76,16 +78,38 @@ namespace SpriteExample
         /// <param name="gameTime">the measured game time</param>
         protected override void Update(GameTime gameTime)
         {
-
-            foreach (var magic in magics)
+            Random r = new Random();
+            if (r.NextDouble() < 0.01)
             {
-                foreach (var bat in bats)
+                Direction[] possibleDirections = { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
+
+                // Create a random number generator
+               
+                // Choose a random direction from the array
+                Direction randomDirection = possibleDirections[r.Next(possibleDirections.Length)];
+                EyeSprite bat = new EyeSprite() { Position = new Vector2(r.Next(20,600), r.Next(20, 600)), Direction = randomDirection };
+                bat.LoadContent(Content);
+                bats.Add(bat);
+            };
+            foreach (var magic in magics.ToList())
+            {
+                foreach (var bat in bats.ToList())
                 {
                     if (magic != null)
                     {
                         if (magic.Bounds.CollidesWith(bat.Bounds))
                         {
-                            magic.position = new Vector2(0, 0);
+                            magic.size -= 0.02f;
+                            bat.size -= magic.size * 10;
+                            if (magic.size <= 0.01f)
+                            {
+                                magics.Remove(magic);
+                            }
+                            if (bat.size <= 0.01f)
+                            {
+                                bats.Remove(bat);
+                            }
+                            
 
                         }
                     }
@@ -112,7 +136,10 @@ namespace SpriteExample
                     magics.Add(magic);
                 }
                 magic.size *= (1.1f * (float)gameTime.ElapsedGameTime.TotalSeconds)+1f;
-                
+                if (magic.size >= 0.1f)
+                {
+                   // magic.size = 1f;
+                }
                 Vector2 mousepos = new Vector2(mouseState.Position.X, mouseState.Position.Y);
                 mousepos = mousepos / zoom;
                 Vector2 directionToMouse = mousepos - slimeGhost.position;
@@ -141,7 +168,7 @@ namespace SpriteExample
                     Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
                     mousePosition = mousePosition / zoom;
                     Vector2 direction = Vector2.Normalize(mousePosition - slimeGhost.position);
-                    magic.velocity = direction * 10000*magic.size; // Adjust the magnitude (speed) as needed.
+                    magic.velocity = direction * 10000 *magic.size; // Adjust the magnitude (speed) as needed.
                   
                 }
                 mouseHeld = 0;
@@ -172,13 +199,13 @@ namespace SpriteExample
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null,null, transformMatrix);
            
-            spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(96, 16, 16, 16), Color.White);
+            //spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(96, 16, 16, 16), Color.White);
             foreach (var bat in bats) bat.Draw(gameTime, spriteBatch);
             MouseState mouseState = Mouse.GetState();
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
             slimeGhost.Draw(gameTime, spriteBatch,mousePosition);
             foreach (var magic in magics) magic.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, $"{zoom:c}", new Vector2(2, 2), Color.Gold);
+            spriteBatch.DrawString(bangers, "Zoom: "+Math.Round(zoom,2), new Vector2(2, 2), Color.Gold);
             spriteBatch.End();
 
             base.Draw(gameTime);

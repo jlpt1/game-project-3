@@ -85,7 +85,7 @@ namespace SpriteExample
             float rotation = (float)Math.Atan2(direction.Y, direction.X);
 
             // Draw texture1
-           // spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(64, 64), 0.25f, spriteEffects, 0);
+            //spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(64, 64), 0.25f, spriteEffects, 0);
 
             // Draw texture2 with rotation towards the mouse
             spriteBatch.Draw(texture2, position+new Vector2(0,0), null, Color.White, rotation, new Vector2(16, 16), 2f, SpriteEffects.None, 0);

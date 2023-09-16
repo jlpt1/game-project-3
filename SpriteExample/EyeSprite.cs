@@ -19,15 +19,17 @@ namespace SpriteExample
     /// <summary>
     /// A class representing a bat sprite
     /// </summary>
-    public class BatSprite
+    public class EyeSprite
     {
         private Texture2D texture;
         private Texture2D texture2;
         private double directionTimer;
         private double animationTimer;
 
-        private short animationFrame = 1;
+        private short animationFrame = 0;
+        private short animationFrame2 = 0;
 
+        public float size = 1f;
         /// <summary>
         /// The direction of the bat
         /// </summary>
@@ -36,8 +38,8 @@ namespace SpriteExample
         /// Position of the bat
         /// </summary>
         public Vector2 Position;
-        private BoundingCircle bounds = new BoundingCircle(new Vector2(0,0), 32);
-        public BoundingCircle Bounds => bounds;
+        private BoundingRectangle bounds = new BoundingRectangle(new Vector2(200 - 16, 200 - 16), 32, 32);
+        public BoundingRectangle Bounds => bounds;
 
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace SpriteExample
         /// <param name="content">The content manager ot load with</param>
         public void LoadContent(ContentManager content)
         {
-            texture = content.Load<Texture2D>("32x32-bat-sprite");
+            texture = content.Load<Texture2D>("eye");
             texture2 = content.Load<Texture2D>("magic");
         }
         /// <summary>
@@ -55,7 +57,8 @@ namespace SpriteExample
         /// <param name="gameTime"> Game time</param>
         public void Update(GameTime gameTime)
         {   //Update the direction timer
-            bounds.Center = Position;
+            bounds.X = Position.X;
+            bounds.Y = Position.Y;
             directionTimer += gameTime.ElapsedGameTime.TotalSeconds;
 
             //Switch directions every 2 seconds
@@ -83,16 +86,16 @@ namespace SpriteExample
             switch (Direction)
             {
                 case Direction.Up:
-                  //  Position += new Vector2(0, -1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, -1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Down:
-                  //  Position += new Vector2(0, 1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(0, 1) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Left:
-                   // Position += new Vector2(-1, 0) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(-1, 0) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
                 case Direction.Right:
-                //    Position += new Vector2(1, 0) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += new Vector2(1, 0) * 100 * (float)gameTime.ElapsedGameTime.TotalSeconds;
                     break;
             }
         }
@@ -107,21 +110,31 @@ namespace SpriteExample
             //Update animation timer
             animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
             //Update animation frame
-            if (animationTimer > 0.3)
+            
+            if (animationTimer > 0.1)
             {
                 animationFrame++;
-                if (animationFrame > 3) animationFrame = 1;
+                if (animationFrame > 2)
+                {
+                    animationFrame = 0;
+                    animationFrame2++;
+                    if (animationFrame2 > 2)
+                    {
+                        animationFrame2 = 0;
+                    }
+                }
                 animationTimer -= 0.3;
             }
 
             //Draw the sprite
-            var source = new Rectangle(animationFrame*32, (int)Direction * 32, 32, 32);
-            spriteBatch.Draw(texture, Position, source, Color.White);
-            var circleCenter = new Vector2(Bounds.Center.X - Bounds.Radius, Bounds.Center.Y - Bounds.Radius);
+            var source = new Rectangle(animationFrame*32, animationFrame2*32, 32, 32);
+            spriteBatch.Draw(texture, Position, source, Color.White, 0, new Vector2(16*size, 16*size), size, SpriteEffects.None, 0);
+
+
             var circleTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
             circleTexture.SetData(new[] { Color.White });
 
-            spriteBatch.Draw(circleTexture, circleCenter, null, Color.Red * 0.5f, 0f, Vector2.Zero, Bounds.Radius * 2, SpriteEffects.None, 0f);
+           // spriteBatch.Draw(circleTexture, Position, null, Color.Red * 0.5f, 0f, Vector2.Zero, 32f, SpriteEffects.None, 0f);
         }
         
 

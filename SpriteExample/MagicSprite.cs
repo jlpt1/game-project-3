@@ -36,9 +36,9 @@ namespace SpriteExample
         public void LoadContent(ContentManager content)
         {
             texture = content.Load<Texture2D>("magic");
-            Vector2 temp = new Vector2((int)position.X - (int)(16), (int)position.Y - (int)(16));
+            Vector2 temp = new Vector2((int)position.X - (int)(size*256), (int)position.Y - (int)(size*256));
       
-            this.bounds = new BoundingCircle(temp, 16);
+            this.bounds = new BoundingCircle(temp, size*256);
         }
 
         /// <summary>
@@ -48,8 +48,10 @@ namespace SpriteExample
         public void Update(GameTime gameTime)
         {
             position += velocity*(float)gameTime.ElapsedGameTime.TotalSeconds;
-            bounds.Center = position;
-          
+            Vector2 temp = new Vector2((int)position.X - (int)(size * 256), (int)position.Y - (int)(size * 256));
+
+            bounds.Center = temp;
+            bounds.Radius = size * 256;
         }
 
         /// <summary>
@@ -61,8 +63,8 @@ namespace SpriteExample
         {
 
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            //spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(256, 256), size, spriteEffects, 0);
-            var rect = new Rectangle((int)position.X, (int)position.Y,16,16);
+            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(256, 256), size, spriteEffects, 0);
+            var rect = new Rectangle((int)position.X- (int)(size * 256), (int)position.Y- (int)(size * 256), (int)(size * 256), (int)(size * 256));
             spriteBatch.Draw(texture, rect, Color.Red);
         }
     }
