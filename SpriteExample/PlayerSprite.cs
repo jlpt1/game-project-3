@@ -20,13 +20,15 @@ namespace SpriteExample
         private Texture2D texture, texture2;
 
         public float zoom=1;
-        
 
-        
+       
+
+
+
 
         private bool flipped;
 
-        public Vector2 position = new Vector2(200, 200);
+        public Vector2 position = new Vector2(300, 200);
 
         /// <summary>
         /// Loads the sprite texture using the provided ContentManager
@@ -34,6 +36,8 @@ namespace SpriteExample
         /// <param name="content">The ContentManager to load with</param>
         public void LoadContent(ContentManager content)
         {
+
+
             texture = content.Load<Texture2D>("rudeus");
             texture2 = content.Load<Texture2D>("hand");
         }
