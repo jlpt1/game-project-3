@@ -108,6 +108,7 @@ namespace SpriteExample
         {
             Random r = new Random();
             TimeSpan pos = MediaPlayer.PlayPosition;
+            
             if (pos.Minutes == 1 && pos.Seconds == 0)
             {
                 EyeSprite bat = new EyeSprite() { Position = new Vector2(r.Next(20, 600), r.Next(20, 600)), Direction = Direction.Right };
@@ -271,7 +272,7 @@ namespace SpriteExample
                 {
                     for (int j = 0; j < 50; j++)
                     {
-                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 0, 0, 32));
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(33,33,33, 255));
                     }
                 }
             }
@@ -302,10 +303,10 @@ namespace SpriteExample
                 
                 for (int i = 0; i < 50; i++)
                 {
-                    spriteBatch.Draw(mainMenuBackground, new Rectangle(i*GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                    spriteBatch.Draw(mainMenuBackground, new Rectangle(i*GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(255, 0, 0, 32));
                     for (int j = 0; j < 50; j++)
                     {
-                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, (j+1) * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(255, 0, 0, 32));
                     }
                 }
             }
@@ -341,7 +342,7 @@ namespace SpriteExample
             spriteBatch.DrawString(bangers, "Press Enter to Start", new Vector2(200, 200), Color.Black); 
             spriteBatch.DrawString(bangers, "Press Esc to Terminate", new Vector2(200, 300), Color.Black);
             spriteBatch.DrawString(bangers, "The Magician's Adventure", new Vector2(200, 0), Color.Gold);
-            spriteBatch.DrawString(bangers, "Tip: Hold to increase size of magic", new Vector2(0, 400), Color.Blue);
+            spriteBatch.DrawString(bangers, "Tip: Scroll to zoom out", new Vector2(0, 400), Color.Red);
 
             spriteBatch.End();
         }
