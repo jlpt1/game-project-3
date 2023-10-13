@@ -158,7 +158,7 @@ namespace SpriteExample
             float zoomSpeed = 0.001f;
             Console.Write(mouseState.ScrollWheelValue);
 
-           // zoom += zoomSpeed * (mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue) * zoom;
+            zoom += zoomSpeed * (mouseState.ScrollWheelValue - previousMouseState.ScrollWheelValue) * zoom;
             slimeGhost.zoom = zoom;
             if (mouseState.LeftButton == ButtonState.Pressed)
             {
@@ -264,7 +264,7 @@ namespace SpriteExample
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, transformMatrix);
 
             //spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(96, 16, 16, 16), Color.White);
-            foreach (var bat in bats) bat.Draw(gameTime, spriteBatch);
+            foreach (var bat in bats) bat.Draw(gameTime, spriteBatch, new Color(255,255,255,128));
             MouseState mouseState = Mouse.GetState();
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
             slimeGhost.Draw(gameTime, spriteBatch, mousePosition);
@@ -277,12 +277,12 @@ namespace SpriteExample
             }
             if (position.Minutes > 0)
             {
-                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.Red);
+                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(255,0,0,128));
 
             }
             else
             {
-                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(128, 128, 128, 32));
             }
 
             spriteBatch.End();

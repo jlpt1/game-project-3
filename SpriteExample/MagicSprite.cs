@@ -63,9 +63,9 @@ namespace SpriteExample
         {
 
             SpriteEffects spriteEffects = (flipped) ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
-            spriteBatch.Draw(texture, position, null, Color.White, 0, new Vector2(256, 256), size, spriteEffects, 0);
+            spriteBatch.Draw(texture, position, null, new Color(size,size*2,size/2), 0, new Vector2(256, 256), size, spriteEffects, 0);
             var rect = new Rectangle((int)position.X- (int)(size * 256), (int)position.Y- (int)(size * 256), (int)(size * 256), (int)(size * 256));
-            spriteBatch.Draw(texture, rect, Color.Red);
+            //spriteBatch.Draw(texture, rect, Color.Red);
         }
     }
 }

@@ -105,7 +105,7 @@ namespace SpriteExample
         /// </summary>
         /// <param name="gameTime">The game time</param>
         /// <param name="spriteBatch">The SpriteBatch to draw with</param>
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Color tint)
         {
             //Update animation timer
             animationTimer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -128,7 +128,7 @@ namespace SpriteExample
 
             //Draw the sprite
             var source = new Rectangle(animationFrame*32, animationFrame2*32, 32, 32);
-            spriteBatch.Draw(texture, Position, source, Color.White, 0, new Vector2(16*size, 16*size), size, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, Position, source, tint, 0, new Vector2(16*size, 16*size), size, SpriteEffects.None, 0);
 
 
             var circleTexture = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
