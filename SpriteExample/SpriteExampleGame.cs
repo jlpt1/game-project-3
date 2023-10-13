@@ -28,6 +28,7 @@ namespace SpriteExample
         private float zoom = 1.0f;
         private Matrix transformMatrix;
         private Texture2D mainMenuBackground;
+        private Texture2D backgroundSky;
         List<EyeSprite> bats = new List<EyeSprite>();
         List<MagicSprite> magics = new List<MagicSprite>();
         private SpriteFont bangers;
@@ -74,6 +75,7 @@ namespace SpriteExample
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             mainMenuBackground = Content.Load<Texture2D>("clouds");
+            backgroundSky = Content.Load<Texture2D>("clouds2");
             backgroundMusic = Content.Load<Song>("music");
             MediaPlayer.Play(backgroundMusic);
             magicCreatedSound = Content.Load<SoundEffect>("magicCreated");
@@ -218,7 +220,7 @@ namespace SpriteExample
             foreach (var magic1 in magics) magic1.Update(gameTime);
             slimeGhost.Update(gameTime);
             foreach (var bat in bats) bat.Update(gameTime);
-            zoom = MathHelper.Clamp(zoom, 0.001f, 2000.0f);
+            zoom = MathHelper.Clamp(zoom, .02f, 5.0f);
             transformMatrix = Matrix.CreateScale(new Vector3(zoom, zoom, 1));
         }
 
@@ -255,21 +257,41 @@ namespace SpriteExample
             }
             else
             {
-                GraphicsDevice.Clear(Color.CornflowerBlue);
+                GraphicsDevice.Clear(new Color(200,200,200));
             }
-            
+           
 
             bangers.MeasureString("This is a string to measure");
             // TODO: Add your drawing code here
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, transformMatrix);
+            if (position.Minutes > 0)
+            {
 
+                for (int i = 0; i < 50; i++)
+                {
+                    for (int j = 0; j < 50; j++)
+                    {
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 0, 0, 32));
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 50; i++)
+                {
+                    for (int j = 0; j < 50; j++)
+                    {
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(0, 0, 255, 255));
+                    }
+                }
+            }
             //spriteBatch.Draw(atlas, new Vector2(50, 50), new Rectangle(96, 16, 16, 16), Color.White);
             foreach (var bat in bats) bat.Draw(gameTime, spriteBatch, new Color(255,255,255,128));
             MouseState mouseState = Mouse.GetState();
             Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
             slimeGhost.Draw(gameTime, spriteBatch, mousePosition);
             foreach (var magic in magics) magic.Draw(gameTime, spriteBatch);
-            spriteBatch.DrawString(bangers, "Score: " + kills, new Vector2(2, 2), Color.Gold);
+            
             string positionText = "Recharge";
             if (position.Minutes < 1)
             {
@@ -277,12 +299,26 @@ namespace SpriteExample
             }
             if (position.Minutes > 0)
             {
-                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(255,0,0,128));
-
+                
+                for (int i = 0; i < 50; i++)
+                {
+                    spriteBatch.Draw(mainMenuBackground, new Rectangle(i*GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                    for (int j = 0; j < 50; j++)
+                    {
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, j * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                    }
+                }
             }
             else
             {
-                spriteBatch.Draw(mainMenuBackground, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(128, 128, 128, 32));
+                for (int i = 0; i < 50; i++)
+                {
+                    spriteBatch.Draw(mainMenuBackground, new Rectangle(i*GraphicsDevice.Viewport.Width, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                    for (int j = 0; j < 50; j++)
+                    {
+                        spriteBatch.Draw(backgroundSky, new Rectangle(i * GraphicsDevice.Viewport.Width, (j+1) * GraphicsDevice.Viewport.Height, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), new Color(200, 200, 200, 32));
+                    }
+                }
             }
 
             spriteBatch.End();
@@ -292,7 +328,9 @@ namespace SpriteExample
 
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(bangers, "Death: " + positionText, new Vector2(550, 10), Color.White);
+            spriteBatch.DrawString(bangers, "Score: " + kills, new Vector2(2, 2), Color.Gold);
+            spriteBatch.DrawString(bangers, "Death: " + positionText, new Vector2(550, 2), Color.White);
+            spriteBatch.DrawString(bangers, "Zoom: " + zoom, new Vector2(200, 2), Color.White);
             spriteBatch.End();
         }
 
