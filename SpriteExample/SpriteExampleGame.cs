@@ -10,6 +10,7 @@ using System.Drawing.Text;
 
 using System.Linq;
 using static System.Collections.Specialized.BitVector32;
+using System.Security.Policy;
 
 namespace SpriteExample
 {
@@ -177,7 +178,12 @@ namespace SpriteExample
                 magic.size *= (1.1f * (float)gameTime.ElapsedGameTime.TotalSeconds) + 1f;
                 if (magic.size >= 0.1f)
                 {
-                    // magic.size = 1f;
+                    zoom = 1f-(float)(Math.Sqrt(magic.size)/5);
+                   
+                }
+                if (magic.size >= 10f)
+                {
+                    magic.size = 10f;
                 }
                 Vector2 mousepos = new Vector2(mouseState.Position.X, mouseState.Position.Y);
                 mousepos = mousepos / zoom;
