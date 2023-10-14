@@ -15,3 +15,4 @@ Content/clouds.png - open game art https://opengameart.org/content/cartoony-clou
 Content/enemyHit.wav - sfxr.me
 Content/magicCreated.wav - sfxr.me
 Content/music.mp3 - Epidemic Sound https://www.epidemicsound.com/track/6OW1CEE1Np/
+Content/clouds2.png - created by me
